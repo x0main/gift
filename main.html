@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>hadiyaaa l hbiba ta3i diyaa :)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Quicksand:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        /* Initial state for preloading */
+        body {
+            opacity: 0;
+            transition: opacity 1s ease-in;
+        }
+
+        /* Gradient and orb background styles */
+        .gradient-bg {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(-45deg, #ff9a9e, #fecfef, #fecfef, #a8edea, #fed6e3, #d299c2, #ffa8b6);
+            background-size: 400% 400%;
+            animation: gradientMove 12s ease infinite;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        /* Floating orbs background */
+        .gradient-bg::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 25% 25%, rgba(255, 255, 255, 0.3) 0%, transparent 25%),
+                radial-gradient(circle at 75% 75%, rgba(255, 182, 193, 0.2) 0%, transparent 25%),
+                radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 30%);
+            pointer-events: none;
+            z-index: 1;
+            animation: orbMove 20s ease infinite;
+        }
+        
+        .gradient-bg::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 80% 20%, rgba(168, 237, 234, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 20% 80%, rgba(254, 207, 239, 0.15) 0%, transparent 40%);
+            pointer-events: none;
+            z-index: 1;
+            animation: orbMove 25s ease infinite reverse;
+        }
+
+        .title-font { font-family: 'Quicksand', sans-serif; }
+
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes orbMove {
+            0%, 100% { transform: translateX(0) translateY(0); }
+            33% { transform: translateX(30px) translateY(-20px); }
+            66% { transform: translateX(-20px) translateY(30px); }
+        }
+
+        /* Preloader styles */
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            transition: opacity 1s ease-out;
+        }
+
+        /* Page transitions */
+        .page {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.6s ease;
+            opacity: 0;
+            transform: translateY(20px);
+            pointer-events: none;
+            padding: 1rem;
+            z-index: 2;
+        }
+        .page.active {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        /* Button styles */
+        .btn {
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            padding: 12px 24px;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+        }
+        .btn-rose {
+            background: rgba(236, 72, 153, 0.9);
+            color: white;
+        }
+        .btn-rose:hover {
+            background: rgba(236, 72, 153, 1);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(236, 72, 153, 0.3);
+        }
+        .btn-gray {
+            background: rgba(107, 114, 128, 0.8);
+            color: white;
+        }
+        .btn-gray:hover {
+            background: rgba(107, 114, 128, 1);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(107, 114, 128, 0.3);
+        }
+
+        /* Floating stickers styles */
+        .floating-stickers {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 0;
+        }
+        .floating-sticker {
+            position: absolute;
+            animation: gentleFloat 25s infinite linear;
+            opacity: 0.8;
+        }
+        @keyframes gentleFloat {
+            0% { transform: translateY(110vh) translateX(0px) rotate(0deg); opacity: 0; }
+            5% { opacity: 0.8; }
+            95% { opacity: 0.8; }
+            100% { transform: translateY(-10vh) translateX(30px) rotate(10deg); opacity: 0; }
+        }
+
+        /* Animation and other styles */
+        .bounce-soft { animation: bounceSoft 4s ease-in-out infinite; }
+        @keyframes bounceSoft {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            border-radius: 20px;
+        }
+        .typing-cursor::after {
+            content: '|';
+            animation: blink 1s infinite;
+            color: #ec4899;
+        }
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+        .music-btn {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(15px);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+        .music-btn:hover {
+            transform: scale(1.05);
+            background: rgba(255, 255, 255, 0.35);
+        }
+        .sticker { filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1)); }
+    </style>
+</head>
+<body class="text-gray-800 gradient-bg">
+
+    <div id="preloader" class="gradient-bg">
+        <img src="https://media.tenor.com/JOp0IicBRzkAAAAi/hi.gif" alt="Loading..." class="w-24 h-24 mb-4 sticker bounce-soft">
+        <p class="text-white text-xl title-font">Kan7dr lik l'hadiya...</p>
+    </div>
+
+    <div class="floating-stickers" id="floating-stickers"></div>
+
+    <button id="music-btn" class="music-btn fixed top-6 left-6 z-50 text-white w-12 h-12 rounded-full flex items-center justify-center">
+        <svg id="music-on-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg>
+        <svg id="music-off-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="hidden"><line x1="1" y1="1" x2="23" y2="23"></line><path d="M9 9v3a3 3 0 0 0 5.12 2.12M15 9.34V4a3 3 0 0 0-5.91-.91"></path><path d="M21 12a9 9 0 0 1-2 5"></path></svg>
+    </button>
+
+    <div id="page1" class="page active">
+        <div class="text-center">
+            <div class="mb-8 bounce-soft">
+                <img src="https://media.tenor.com/3rSzg8dQoY8AAAAi/goma-heart-goma-love.gif" alt="Cute Friends" class="w-32 h-32 mx-auto sticker rounded-full" style="object-fit: cover;">
+            </div>
+            <h1 class="title-font text-5xl md:text-6xl font-semibold text-white mb-6 drop-shadow-lg">Happy BSF Day</h1>
+            <p class="text-xl md:text-2xl mb-10 max-w-2xl drop-shadow-md font-bold text-gray-800">Lghzala dyali, dyiaa 9adit lik wahd l7aja sghiiiiwraaa ntmna t3jbk</p>
+            <button onclick="showPage('page2')" class="btn btn-rose"> Click here ♡</button>
+        </div>
+    </div>
+
+    <div id="page2" class="page">
+        <div class="text-center glass-card p-10 max-w-md">
+            <h2 class="title-font text-3xl font-semibold mb-5 text-gray-800">ktbt Lik wahed la lettre </h2>
+            <div class="mb-8 bounce-soft">
+                <img src="https://media.tenor.com/rw5Q9sSwQGUAAAAi/cute-love.gif" alt=" Letter" class="w-50 h-50 mx-auto sticker">
+            </div>
+            <p class="text-xl text-gray-700 mb-8 font-light">mew mew tbri tchofihaa ????</p>
+            <div class="flex justify-center gap-4">
+                <button onclick="showPage('page2_no')" class="btn btn-gray">Nnn 3awdha l rask</button>
+                <button onclick="showPage('page3')" class="btn btn-rose">Ayeeeeh brit</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="page2_no" class="page">
+        <div class="text-center glass-card p-10 max-w-md">
+            <div class="mb-6 bounce-soft">
+                <img src="https://media.tenor.com/_ld34knbSZYAAAAi/banana.gif" alt="Sad Cat" class="w-50 h-50 mx-auto sticker">
+            </div>
+            <p class="text-xl text-gray-700 mb-8 font-light">Yaaak 3afak, 7elliha... Rah fiha wa7d L haja zwina .</p>
+            <button onclick="showPage('page2')" class="btn btn-rose">5awlii mra a5raa :))</button>
+        </div>
+    </div>
+
+    <div id="page3" class="page overflow-y-auto">
+        <div class="glass-card max-w-3xl w-full my-8 p-8 md:p-12">
+            <div class="text-center mb-8">
+                <img src="https://media.tenor.com/9pNKP4HIHZcAAAAi/love-happy.gif" alt="Love Letter" class="w-25 h-25 mx-auto sticker bounce-soft">
+            </div>
+            <div dir="ltr" class="text-left text-lg md:text-xl space-y-6 leading-relaxed">
+                <p class="text-gray-800 font-bold">Happy best friends Day, ya a7la o aghla  sadi9aaa . ☺️</p>
+                <p class="text-gray-800 font-bold">Ntiya hiya doo li kaydowwi 7yatii, O lfar7a li kat3mmer 9elbi. Kol 7aja fik tn7bhaa, men de7ktek ly ttjib liya s3ada l 9elbi, tal ro7ek lfenaaa w lghzala.</p>
+                <p class="text-gray-800 font-bold">Kan7ess brasi as3ad wa7d f l'3alam mli nti m3aya. chokraan 3la kolchi. w Kanbghik :)))</p>
+                <div class="text-center mt-10 relative">
+                    <button onclick="showPage('page4')" class="btn btn-rose">Brkiii hna bach tchofi wahd l7aja ;)</button>
+                    <img src="https://media.tenor.com/mMr6S-_lnaYAAAAi/heart-love.gif" alt="Love GIF" class="w-20 h-20 absolute inset-0 m-auto" style="z-index: -1;">
+                </div>
+            </div>
+        </div>
+    </div>
+        
+    <div id="page4" class="page">
+        <div class="glass-card max-w-3xl w-full my-8 p-8 md:p-12 text-center">
+            <div class="mb-8">
+                <img src="https://media.tenor.com/BDP5eJeyZPQAAAAi/tkthao219-bubududu.gif" alt="Happy Friends" class=" mx-auto sticker bounce-soft">
+                <h1 class="title-font text-4xl font-semibold text-gray-800 mb-4 mt-4">Brytii t3arfi 3lach tnhbk w 3ziza 3liya</h1>
+            </div>
+            <div id="reasons-container" dir="ltr" class="text-left text-lg space-y-6 min-h-[200px] font-light">
+            </div>
+            <div id="loading-spinner" class="hidden my-8">
+                <img src="https://media.tenor.com/JOp0IicBRzkAAAAi/hi.gif" alt="Loading" class="w-16 h-16 mx-auto sticker">
+            </div>
+            <button id="generate-btn" onclick="generateReasons()" class="btn btn-rose mt-8"> Ayeeeeh</button>
+        </div>
+    </div>
+
+    <script>
+        const preloader = document.getElementById('preloader');
+        const body = document.querySelector('body');
+        const songUrl = 'https://files.catbox.moe/k3f5rz.mp3';
+        let audio;
+
+        const assetsToLoad = [
+            'https://media.tenor.com/3rSzg8dQoY8AAAAi/goma-heart-goma-love.gif',
+            'https://media.tenor.com/rw5Q9sSwQGUAAAAi/cute-love.gif',
+            'https://media.tenor.com/_ld34knbSZYAAAAi/banana.gif',
+            'https://media.tenor.com/9pNKP4HIHZcAAAAi/love-happy.gif',
+            'https://media.tenor.com/mMr6S-_lnaYAAAAi/heart-love.gif',
+            'https://media.tenor.com/BDP5eJeyZPQAAAAi/tkthao219-bubududu.gif',
+            'https://media.tenor.com/JOp0IicBRzkAAAAi/hi.gif',
+            'https://cdn.pixabay.com/animation/2022/07/30/22/01/22-01-29-66_512.gif',
+            'https://cdn.pixabay.com/animation/2023/07/02/16/21/16-21-18-411_512.gif',
+            'https://cdn.pixabay.com/animation/2023/07/02/16/21/16-21-08-12_512.gif',
+            'https://media.tenor.com/ujq2yTt6EuoAAAAi/crystal-amaru.gif',
+            songUrl // Add song url to the list
+        ];
+
+        let loadedCount = 0;
+        const totalAssets = assetsToLoad.length;
+
+        function assetLoaded() {
+            loadedCount++;
+            if (loadedCount >= totalAssets) {
+                // When all assets are loaded, hide preloader and show the page
+                preloader.style.opacity = '0';
+                body.style.opacity = '1';
+                // Remove preloader from DOM after transition to improve performance
+                setTimeout(() => {
+                    preloader.style.display = 'none';
+                }, 1000);
+            }
+        }
+
+        assetsToLoad.forEach(url => {
+            if (url.endsWith('.mp3')) {
+                // Handle audio preloading
+                const preloadedAudio = new Audio();
+                preloadedAudio.oncanplaythrough = () => {
+                    audio = preloadedAudio; // Assign to the global audio variable
+                    audio.loop = true;
+                    assetLoaded();
+                };
+                preloadedAudio.onerror = assetLoaded; // Count errors as loaded to not block the page
+                preloadedAudio.src = url;
+            } else {
+                // Handle image preloading
+                const img = new Image();
+                img.onload = assetLoaded;
+                img.onerror = assetLoaded; // Also count errors as loaded
+                img.src = url;
+            }
+        });
+
+
+        let currentPage = 'page1';
+        function showPage(id) {
+            document.getElementById(currentPage)?.classList.remove('active');
+            document.getElementById(id)?.classList.add('active');
+            currentPage = id;
+        }
+
+        document.getElementById('music-btn').addEventListener('click', () => {
+            if (!audio) return; 
+            if (audio.paused) {
+                audio.play();
+                document.getElementById('music-on-icon').classList.add('hidden');
+                document.getElementById('music-off-icon').classList.remove('hidden');
+            } else {
+                audio.pause();
+                document.getElementById('music-on-icon').classList.remove('hidden');
+                document.getElementById('music-off-icon').classList.add('hidden');
+            }
+        });
+
+        const floatingContainer = document.getElementById('floating-stickers');
+        const stickerUrls = [
+            'https://cdn.pixabay.com/animation/2022/07/30/22/01/22-01-29-66_512.gif',
+            'https://cdn.pixabay.com/animation/2023/07/02/16/21/16-21-18-411_512.gif',
+            'https://cdn.pixabay.com/animation/2023/07/02/16/21/16-21-08-12_512.gif',
+            'https://media.tenor.com/ujq2yTt6EuoAAAAi/crystal-amaru.gif',
+        ];
+
+        for (let i = 0; i < 8; i++) {
+            const sticker = document.createElement('img');
+            sticker.className = 'floating-sticker sticker';
+            sticker.src = stickerUrls[Math.floor(Math.random() * stickerUrls.length)];
+            sticker.style.left = `${Math.random() * 100}vw`;
+            sticker.style.width = `${Math.random() * 30 + 30}px`;
+            sticker.style.height = `${Math.random() * 30 + 30}px`;
+            sticker.style.animationDuration = `${Math.random() * 10 + 11}s`;
+            sticker.style.animationDelay = `${Math.random() * 10}s`;
+            sticker.style.objectFit = 'cover';
+            floatingContainer.appendChild(sticker);
+        }
+
+        // --- Custom Reasons Generation ---
+        async function generateReasons() {
+            const generateBtn = document.getElementById('generate-btn');
+            const loadingSpinner = document.getElementById('loading-spinner');
+            const reasonsContainer = document.getElementById('reasons-container');
+
+            generateBtn.classList.add('hidden');
+            loadingSpinner.classList.remove('hidden');
+            reasonsContainer.innerHTML = '';
+
+            const customReasons = [
+                "Kanbghik 7it ntiya dima kat3tini l amal o katkhlyni n7ess bi anna kol chi momkin  ",
+                "Fin ma tn7tajk tnl9ak jnbi w tt3awnini w ttsm3i liya   ",
+                "Dryfaa nti dima driyfaa m3aya  w ga3 mtt5asri 5atri  ",
+                "tn7s bik ttfhmini w tt3arfi mali bla mn7taj nhdr bzaaf    ",
+                "Chokran 3la kolchi, kanbghik bzaaaf! ♡"
+            ];
+
+            setTimeout(() => {
+                loadingSpinner.classList.add('hidden');
+                typeReasons(customReasons, reasonsContainer);
+            }, 2500);
+        }
+
+        function typeReasons(reasonsArray, container) {
+            let reasonIndex = 0;
+            let charIndex = 0;
+            
+            function type() {
+                if (reasonIndex < reasonsArray.length) {
+                    if (charIndex === 0) {
+                        const p = document.createElement('p');
+                        p.className = 'opacity-0 transition-all duration-500 transform translate-y-4 border-l-4 border-rose-300 pl-4 typing-cursor';
+                        container.appendChild(p);
+                        setTimeout(() => p.classList.remove('opacity-0', 'translate-y-4'), 100);
+                    }
+                    const currentP = container.children[reasonIndex];
+                    if (charIndex < reasonsArray[reasonIndex].length) {
+                        currentP.textContent += reasonsArray[reasonIndex].charAt(charIndex);
+                        charIndex++;
+                        setTimeout(type, 40);
+                    } else {
+                        currentP.classList.remove('typing-cursor');
+                        reasonIndex++;
+                        charIndex = 0;
+                        setTimeout(type, 1000);
+                    }
+                }
+            }
+            type();
+        }
+    </script>
+</body>
+</html>
