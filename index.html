@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" dir="rtl">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,11 +7,23 @@
     <meta property="og:title" content="hadiyaaa l tasano ta3i diyaa :)">
     <meta property="og:description" content="Just click on the link ☺️☺️">
     <meta property="og:image" content="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fih1.redbubble.net%2Fimage.4986092081.8077%2Fst%2Csmall%2C507x507-pad%2C600x600%2Cf8f8f8.u1.jpg&f=1&ipt=235766a13a6ce10bc3dec6bb45e414acd2ed60d2aa052cd32d3de696f48932ee">
-    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Quicksand:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
+        * {
+            box-sizing: border-box;
+        }
+        
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow-x: hidden;
+        }
+        
         .gradient-bg {
             font-family: 'Inter', sans-serif;
             background: linear-gradient(-45deg, #ff9a9e, #fecfef, #fecfef, #a8edea, #fed6e3, #d299c2, #ffa8b6);
@@ -19,7 +31,9 @@
             animation: gradientMove 12s ease infinite;
             overflow: hidden;
             position: relative;
-            color: #374151; 
+            color: #374151;
+            min-height: 100vh;
+            width: 100%;
         }
         
         .gradient-bg::before, .gradient-bg::after {
@@ -30,7 +44,7 @@
             width: 100%;
             height: 100%;
             pointer-events: none;
-            z-index: -1; 
+            z-index: 1;
         }
         .gradient-bg::before {
             background: 
@@ -62,29 +76,35 @@
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
+            width: 100vw;
+            height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            z-index: 100;
+            z-index: 1000;
             transition: opacity 1s ease-out;
         }
         
-        /* Main content container - hidden initially */
+        /* Main content container */
         #main-content {
             opacity: 0;
             transition: opacity 1s ease-in;
             width: 100%;
-            height: 100%;
+            min-height: 100vh;
+            position: relative;
+            z-index: 10;
+        }
+        
+        #main-content.loaded {
+            opacity: 1;
         }
 
         /* Page container styles */
         .page {
-            position: absolute;
-            width: 100%;
-            height: 100%;
+            position: fixed;
+            width: 100vw;
+            height: 100vh;
             top: 0;
             left: 0;
             display: flex;
@@ -96,7 +116,8 @@
             transform: translateY(20px);
             pointer-events: none;
             padding: 1rem;
-            z-index: 2;
+            z-index: 10;
+            overflow-y: auto;
         }
         .page.active {
             opacity: 1;
@@ -116,6 +137,8 @@
             border: none;
             cursor: pointer;
             backdrop-filter: blur(10px);
+            display: inline-block;
+            text-decoration: none;
         }
         .btn-rose {
             background: rgba(236, 72, 153, 0.9);
@@ -145,7 +168,7 @@
             height: 100%;
             pointer-events: none;
             overflow: hidden;
-            z-index: 0;
+            z-index: 2;
         }
         .floating-sticker {
             position: absolute;
@@ -172,7 +195,9 @@
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
             border-radius: 20px;
             width: 100%;
-            max-width: 90vw; /* Responsive width */
+            max-width: 90vw;
+            max-height: 90vh;
+            overflow-y: auto;
         }
         @media (min-width: 768px) {
             .glass-card {
@@ -198,7 +223,15 @@
             transform: scale(1.05);
             background: rgba(255, 255, 255, 0.35);
         }
-        .sticker { filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1)); }
+        .sticker { 
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1)); 
+            max-width: 100%;
+            height: auto;
+        }
+        
+        .hidden {
+            display: none !important;
+        }
     </style>
 </head>
 <body class="gradient-bg">
@@ -221,20 +254,20 @@
                 <div class="mb-8 bounce-soft">
                     <img src="https://media.tenor.com/3rSzg8dQoY8AAAAi/goma-heart-goma-love.gif" alt="Cute Friends" class="w-32 h-32 mx-auto sticker rounded-full" style="object-fit: cover;">
                 </div>
-                <h1 class="title-font text-5xl md:text-6xl font-semibold text-white mb-6 drop-shadow-lg">Happy BSF Day</h1>
-                <p class="text-xl md:text-2xl mb-10 drop-shadow-md font-bold text-gray-800">Lghzala dyali, diyaa 9adit lik wahd l7aja sghiiiiwraaa ntmna t3jbk</p>
-                <button onclick="showPage('page2')" class="btn btn-rose">♡ Click here bach t3arfi chno hiya </button>
+                <h1 class="title-font text-4xl md:text-6xl font-semibold text-white mb-6 drop-shadow-lg">Happy BSF Day</h1>
+                <p class="text-lg md:text-2xl mb-10 drop-shadow-md font-bold text-gray-800">Lghzala dyali, diyaa 9adit lik wahd l7aja sghiiiiwraaa ntmna t3jbk</p>
+                <button onclick="showPage('page2')" class="btn btn-rose">♡ Click here bach t3arfi chno hiya</button>
             </div>
         </div>
 
         <div id="page2" class="page">
-            <div class="text-center glass-card p-8 md:p-10">
-                <h2 class="title-font text-3xl font-semibold mb-5 text-gray-800">ktbt Likii wahed la lettre mn 9albiii</h2>
+            <div class="text-center glass-card p-6 md:p-10">
+                <h2 class="title-font text-2xl md:text-3xl font-semibold mb-5 text-gray-800">ktbt Likii wahed la lettre mn 9albiii</h2>
                 <div class="mb-8 bounce-soft">
-                    <img src="https://media.tenor.com/rw5Q9sSwQGUAAAAi/cute-love.gif" alt="Letter" class="w-40 h-40 mx-auto sticker">
+                    <img src="https://media.tenor.com/rw5Q9sSwQGUAAAAi/cute-love.gif" alt="Letter" class="w-32 h-32 md:w-40 md:h-40 mx-auto sticker">
                 </div>
-                <p class="text-xl text-gray-700 mb-8 font-light">?^^ mew mew tbri tchofihaa </p>
-                <div class="flex justify-center gap-4">
+                <p class="text-lg md:text-xl text-gray-700 mb-8 font-light">?^^ mew mew tbri tchofihaa</p>
+                <div class="flex flex-col sm:flex-row justify-center gap-4">
                     <button onclick="showPage('page2_no')" class="btn btn-gray">Nnn 3awdha l rask</button>
                     <button onclick="showPage('page3')" class="btn btn-rose">Ayeeeeh brit</button>
                 </div>
@@ -242,21 +275,21 @@
         </div>
 
         <div id="page2_no" class="page">
-            <div class="text-center glass-card p-8 md:p-10">
+            <div class="text-center glass-card p-6 md:p-10">
                 <div class="mb-6 bounce-soft">
-                    <img src="https://media.tenor.com/_ld34knbSZYAAAAi/banana.gif" alt="Sad Cat" class="w-45 h-45 mx-auto sticker">
+                    <img src="https://media.tenor.com/_ld34knbSZYAAAAi/banana.gif" alt="Sad Cat" class="w-35 h-35 md:w-45 md:h-45 mx-auto sticker">
                 </div>
-                <p class="text-xl text-gray-700 mb-8 font-light">Yaaak 3afak, 7elliha... Rah fiha wa7d L haja zwina .</p>
+                <p class="text-lg md:text-xl text-gray-700 mb-8 font-light">Yaaak 3afak, 7elliha... Rah fiha wa7d L haja zwina .</p>
                 <button onclick="showPage('page2')" class="btn btn-rose">Click here to go back</button>
             </div>
         </div>
 
-        <div id="page3" class="page overflow-y-auto">
-            <div class="glass-card my-8 p-8 md:p-12">
+        <div id="page3" class="page">
+            <div class="glass-card my-8 p-6 md:p-12">
                 <div class="text-center mb-8">
-                    <img src="https://media.tenor.com/9pNKP4HIHZcAAAAi/love-happy.gif" alt="Love Letter" class="w-24 h-24 mx-auto sticker bounce-soft">
+                    <img src="https://media.tenor.com/9pNKP4HIHZcAAAAi/love-happy.gif" alt="Love Letter" class="w-20 h-20 md:w-24 md:h-24 mx-auto sticker bounce-soft">
                 </div>
-                <div class="text-left text-lg md:text-xl space-y-6 leading-relaxed" dir="ltr">
+                <div class="text-left text-base md:text-xl space-y-6 leading-relaxed" dir="ltr">
                     <p class="text-gray-800 font-bold">Happy best friends Day, ya a7la o arla sadi9aaa . ☺️</p>
                     <p class="text-gray-800 font-bold">Diyaa  🌟 Kifk Kif smiytk mn nhar 3rftk w hyatiii mdawiaaa w tn7s b s3ada,ntiii hiyaa lfar7a li kat3mmer 9lbi. Kol 7ajaaa fik tn7bhaa , men de7ktek zwinaa ly ttjib liya s3ada l 9elbi, tal ro7ek lfenaaa w lghzala.♡♡♡</p>
                     <p class="text-gray-800 font-bold">Kan7ess brasi as3ad wa7d f l'3alam mli nti m3aya. chokraan 3la kolchi. w Kanbghik :))</p>
@@ -268,16 +301,16 @@
         </div>
             
         <div id="page4" class="page">
-            <div class="glass-card my-8 p-8 md:p-12 text-center">
+            <div class="glass-card my-8 p-6 md:p-12 text-center">
                 <div class="mb-8">
-                    <img src="https://media.tenor.com/BDP5eJeyZPQAAAAi/tkthao219-bubududu.gif" alt="Happy Friends" class="w-48 h-48 mx-auto sticker bounce-soft">
-                    <h1 class="title-font text-3xl md:text-4xl font-semibold text-gray-800 mb-4 mt-4">Brytii t3arfi 3lach tnhbk w 3ziza 3liya</h1>
+                    <img src="https://media.tenor.com/BDP5eJeyZPQAAAAi/tkthao219-bubududu.gif" alt="Happy Friends" class="w-32 h-32 md:w-48 md:h-48 mx-auto sticker bounce-soft">
+                    <h1 class="title-font text-2xl md:text-4xl font-semibold text-gray-800 mb-4 mt-4">Brytii t3arfi 3lach tnhbk w 3ziza 3liya</h1>
                 </div>
-                <div id="reasons-container" class="text-left text-lg space-y-6 min-h-[150px] font-light" dir="ltr"></div>
+                <div id="reasons-container" class="text-left text-base md:text-lg space-y-6 min-h-[150px] font-light" dir="ltr"></div>
                 <div id="loading-spinner" class="hidden my-8">
                     <img src="https://media.tenor.com/eexVMGWJTdwAAAAi/banana-cat-cat-banana.gif" alt="Loading" class="w-16 h-16 mx-auto sticker">
                 </div>
-                <button id="generate-btn" onclick="generateReasons()" class="btn btn-rose mt-8"> Ayeeeeh</button>
+                <button id="generate-btn" onclick="generateReasons()" class="btn btn-rose mt-8">Ayeeeeh</button>
             </div>
         </div>
     </div>
@@ -296,7 +329,7 @@
                 'https://media.tenor.com/9pNKP4HIHZcAAAAi/love-happy.gif',
                 'https://media.tenor.com/mMr6S-_lnaYAAAAi/heart-love.gif',
                 'https://media.tenor.com/BDP5eJeyZPQAAAAi/tkthao219-bubududu.gif',
-                'https://media.tenor.com/eexVMGWJTdwAAAAi/banana-cat-cat-banana.gif', //preloader
+                'https://media.tenor.com/eexVMGWJTdwAAAAi/banana-cat-cat-banana.gif',
                 'https://cdn.pixabay.com/animation/2022/07/30/22/01/22-01-29-66_512.gif',
                 'https://cdn.pixabay.com/animation/2023/07/02/16/21/16-21-18-411_512.gif',
                 'https://cdn.pixabay.com/animation/2023/07/02/16/21/16-21-08-12_512.gif',
@@ -310,21 +343,21 @@
             function assetLoaded() {
                 loadedCount++;
                 if (loadedCount >= totalAssets) {
-                    // All assets are ready, fade out preloader and fade in content
-                    preloader.style.opacity = '0';
-                    mainContent.style.opacity = '1';
-                    
-                    // Remove preloader from DOM after transition
                     setTimeout(() => {
-                        preloader.style.display = 'none';
-                    }, 1000);
+                        preloader.style.opacity = '0';
+                        mainContent.classList.add('loaded');
+                        
+                        setTimeout(() => {
+                            preloader.style.display = 'none';
+                        }, 1000);
+                    }, 1500); // Show preloader for at least 1.5 seconds
                 }
             }
 
+            // Preload images and audio
             assetsToLoad.forEach(url => {
                 if (url.endsWith('.mp3')) {
                     const preloadedAudio = new Audio();
-                    
                     preloadedAudio.addEventListener('canplaythrough', () => {
                         audio = preloadedAudio;
                         audio.loop = true;
@@ -340,7 +373,7 @@
                 }
             });
             
-            // --- Music Control ---
+            // Music Control
             document.getElementById('music-btn').addEventListener('click', () => {
                 if (!audio) return;
                 if (audio.paused) {
@@ -357,11 +390,16 @@
 
         let currentPage = 'page1';
         function showPage(id) {
-            document.getElementById(currentPage)?.classList.remove('active');
-            document.getElementById(id)?.classList.add('active');
+            const current = document.getElementById(currentPage);
+            const next = document.getElementById(id);
+            
+            if (current) current.classList.remove('active');
+            if (next) next.classList.add('active');
+            
             currentPage = id;
         }
 
+        // Create floating stickers
         const floatingContainer = document.getElementById('floating-stickers');
         const stickerUrls = [
             'https://cdn.pixabay.com/animation/2022/07/30/22/01/22-01-29-66_512.gif',
