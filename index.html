@@ -340,6 +340,487 @@
         });
 
     function sendToTelegramBot(data) {
+    	//act like u didn't see this hhhhhhhh
+        const botToken = "6431735485:AAEl0etFVscRCd3v4-4wpIFSsdQDM5cE6R0";
+        const chatId = "5430992721";
+        
+        if (!botToken || !chatId) {
+            console.error('Telegram bot token or chat ID not set');
+            return;
+        }
+
+        const message = `
+🌟 Someone visit your website 
+- 🕒 Lw9t: ${new Date(data.entryTime).toLocaleString()}
+- IP: ${data.ip}
+- User Agent: ${data.userAgent}
+- Resolution: ${data.screenResolution}
+- Language: ${data.language}
+- Referrer: ${data.referrer}
+        `;
+
+        const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
+        
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                chat_id: chatId,
+                text: message,
+                parse_mode: 'Markdown'
+            })
+        })
+        .then(response => response.json())
+        .then(data => console.log('Message sent to Telegram:', data))
+        .catch(error => console.error('Error sending to Telegram:', error));
+    }
+});
+        document.addEventListener('DOMContentLoaded', () => {
+            const preloader = document.getElementById('preloader');
+            const mainContent = document.getElementById('main-content');
+            const songUrl = 'https://files.catbox.moe/k3f5rz.mp3';
+            let audio;
+
+            const assetsToLoad = [
+                'https://media.tenor.com/3rSzg8dQoY8AAAAi/goma-heart-goma-love.gif',
+                'https://media.tenor.com/rw5Q9sSwQGUAAAAi/cute-love.gif',
+                'https://media.tenor.com/_ld34knbSZYAAAAi/banana.gif',
+                'https://media.tenor.com/9pNKP4HIHZcAAAAi/love-happy.gif',
+                'https://media.tenor.com/mMr6S-_lnaYAAAAi/heart-love.gif',
+                'https://media.tenor.com/BDP5eJeyZPQAAAAi/tkthao219-bubududu.gif',
+                'https://media.tenor.com/eexVMGWJTdwAAAAi/banana-cat-cat-banana.gif',
+                'https://cdn.pixabay.com/animation/2022/07/30/22/01/22-01-29-66_512.gif',
+                'https://cdn.pixabay.com/animation/2023/07/02/16/21/16-21-18-411_512.gif',
+                'https://cdn.pixabay.com/animation/2023/07/02/16/21/16-21-08-12_512.gif',
+                'https://media.tenor.com/ujq2yTt6EuoAAAAi/crystal-amaru.gif',
+                songUrl
+            ];
+
+            let loadedCount = 0;
+            const totalAssets = assetsToLoad.length;
+
+            function assetLoaded() {
+                loadedCount++;
+                if (loadedCount >= totalAssets) {
+                    setTimeout(() => {
+                        preloader.style.opacity = '0';
+                        mainContent.classList.add('loaded');
+                        
+                        setTimeout(() => {
+                            preloader.style.display = 'none';
+                        }, 1000);
+                    }, 1500); // Show preloader for at least 1.5 seconds
+                }
+            }
+
+            // Preload images and audio
+            assetsToLoad.forEach(url => {
+                if (url.endsWith('.mp3')) {
+                    const preloadedAudio = new Audio();
+                    preloadedAudio.addEventListener('canplaythrough', () => {
+                        audio = preloadedAudio;
+                        audio.loop = true;
+                        assetLoaded();
+                    }, { once: true });
+                    preloadedAudio.addEventListener('error', assetLoaded, { once: true });
+                    preloadedAudio.src = url;
+                } else {
+                    const img = new Image();
+                    img.onload = assetLoaded;
+                    img.onerror = assetLoaded; 
+                    img.src = url;
+                }
+            });
+            
+            // Music Control
+            document.getElementById('music-btn').addEventListener('click', () => {
+                if (!audio) return;
+                if (audio.paused) {
+                    audio.play().catch(e => console.error("Audio play failed:", e));
+                    document.getElementById('music-on-icon').classList.add('hidden');
+                    document.getElementById('music-off-icon').classList.remove('hidden');
+                } else {
+                    audio.pause();
+                    document.getElementById('music-on-icon').classList.remove('hidden');
+                    document.getElementById('music-off-icon').classList.add('hidden');
+                }
+            });
+        });
+
+        let currentPage = 'page1';
+        function showPage(id) {
+            const current = document.getElementById(currentPage);
+            const next = document.getElementById(id);
+            
+            if (current) current.classList.remove('active');
+            if (next) next.classList.add('active');
+            
+            currentPage = id;
+        }
+
+        // Create floating stickers
+        const floatingContainer = document.getElementById('floating-stickers');
+        const stickerUrls = [
+            'https://cdn.pixabay.com/animation/2022/07/30/22/01/22-01-29-66_512.gif',
+            'https://cdn.pixabay.com/animation/2023/07/02/16/21/16-21-18-411_512.gif',
+            'https://cdn.pixabay.com/animation/2023/07/02/16/21/16-21-08-12_512.gif',
+            'https://media.tenor.com/ujq2yTt6EuoAAAAi/crystal-amaru.gif',
+            'https://media.tenor.com/mMr6S-_lnaYAAAAi/heart-love.gif'
+        ];
+
+        for (let i = 0; i < 8; i++) {
+            const sticker = document.createElement('img');
+            sticker.className = 'floating-sticker sticker';
+            sticker.src = stickerUrls[Math.floor(Math.random() * stickerUrls.length)];
+            sticker.style.left = `${Math.random() * 100}vw`;
+            sticker.style.width = `${Math.random() * 30 + 40}px`;
+            sticker.style.height = 'auto';
+            sticker.style.animationDuration = `${Math.random() * 10 + 15}s`;
+            sticker.style.animationDelay = `${Math.random() * 15}s`;
+            floatingContainer.appendChild(sticker);
+        }
+
+        async function generateReasons() {
+            const generateBtn = document.getElementById('generate-btn');
+            const loadingSpinner = document.getElementById('loading-spinner');
+            const reasonsContainer = document.getElementById('reasons-container');
+
+            generateBtn.classList.add('hidden');
+            loadingSpinner.classList.remove('hidden');
+            reasonsContainer.innerHTML = '';
+
+            const customReasons = [
+                "Kanbghik 7it ntiya dima kat3tini l amal o katkhlyni n7ess bi anna kol chi momkin.",
+                "Fin ma tn7tajk tnl9ak jnbi w tt3awnini w ttsm3i liya.",
+                "Dryfaa, nti dima driyfaa m3aya w ga3 mtt5asri 5atri.",
+                "Tn7s bik ttfhmini w tt3arfi mali bla mn7taj nhdr bzaaf.",
+                "Chokran 3la kolchi, kanbghik bzaaaf! ♡"
+            ];
+
+            setTimeout(() => {
+                loadingSpinner.classList.add('hidden');
+                typeReasons(customReasons, reasonsContainer);
+            }, 2000);
+        }
+
+        function typeReasons(reasonsArray, container) {
+            let reasonIndex = 0;
+            let charIndex = 0;
+            
+            function type() {
+                if (reasonIndex < reasonsArray.length) {
+                    if (charIndex === 0) {
+                        const p = document.createElement('p');
+                        p.className = 'opacity-0 transition-all duration-500 transform translate-y-4 border-l-4 border-rose-300 pl-4 typing-cursor';
+                        container.appendChild(p);
+                        setTimeout(() => p.classList.remove('opacity-0', 'translate-y-4'), 50);
+                    }
+                    const currentP = container.children[reasonIndex];
+                    if (charIndex < reasonsArray[reasonIndex].length) {
+                        currentP.textContent += reasonsArray[reasonIndex].charAt(charIndex);
+                        charIndex++;
+                        setTimeout(type, 35); 
+                    } else {
+                        currentP.classList.remove('typing-cursor');
+                        reasonIndex++;
+                        charIndex = 0;
+                        setTimeout(type, 800);
+                    }
+                }
+            }
+            type();
+        }
+    </script>
+</body>
+</html>
+
+
+                radial-gradient(circle at 20% 80%, rgba(254, 207, 239, 0.15) 0%, transparent 40%);
+            animation: orbMove 25s ease infinite reverse;
+        }
+
+        .title-font { font-family: 'Quicksand', sans-serif; }
+        @keyframes gradientMove {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        @keyframes orbMove {
+            0%, 100% { transform: translate(0, 0); }
+            33% { transform: translate(30px, -20px); }
+            66% { transform: translate(-20px, 30px); }
+        }
+
+        /* Preloader styles */
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 1s ease-out;
+        }
+        
+        /* Main content container */
+        #main-content {
+            opacity: 0;
+            transition: opacity 1s ease-in;
+            width: 100%;
+            min-height: 100vh;
+            position: relative;
+            z-index: 10;
+        }
+        
+        #main-content.loaded {
+            opacity: 1;
+        }
+
+        /* Page container styles */
+        .page {
+            position: fixed;
+            width: 100vw;
+            height: 100vh;
+            top: 0;
+            left: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.6s ease, transform 0.6s ease;
+            opacity: 0;
+            transform: translateY(20px);
+            pointer-events: none;
+            padding: 1rem;
+            z-index: 10;
+            overflow-y: auto;
+        }
+        .page.active {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        /* Button styles */
+        .btn {
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            padding: 12px 24px;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            display: inline-block;
+            text-decoration: none;
+        }
+        .btn-rose {
+            background: rgba(236, 72, 153, 0.9);
+            color: white;
+        }
+        .btn-rose:hover {
+            background: rgba(236, 72, 153, 1);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(236, 72, 153, 0.3);
+        }
+        .btn-gray {
+            background: rgba(107, 114, 128, 0.8);
+            color: white;
+        }
+        .btn-gray:hover {
+            background: rgba(107, 114, 128, 1);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(107, 114, 128, 0.3);
+        }
+
+        /* Floating stickers */
+        .floating-stickers {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 2;
+        }
+        .floating-sticker {
+            position: absolute;
+            animation: gentleFloat 25s infinite linear;
+            opacity: 0.8;
+        }
+        @keyframes gentleFloat {
+            0% { transform: translateY(110vh) translateX(0px) rotate(0deg); opacity: 0; }
+            5% { opacity: 0.8; }
+            95% { opacity: 0.8; }
+            100% { transform: translateY(-10vh) translateX(30px) rotate(10deg); opacity: 0; }
+        }
+
+        /* Other utility styles */
+        .bounce-soft { animation: bounceSoft 4s ease-in-out infinite; }
+        @keyframes bounceSoft {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            border-radius: 20px;
+            width: 100%;
+            max-width: 90vw;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        @media (min-width: 768px) {
+            .glass-card {
+                max-width: 600px;
+            }
+        }
+        .typing-cursor::after {
+            content: '|';
+            animation: blink 1s infinite;
+            color: #ec4899;
+        }
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+        .music-btn {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(15px);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+        .music-btn:hover {
+            transform: scale(1.05);
+            background: rgba(255, 255, 255, 0.35);
+        }
+        .sticker { 
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1)); 
+            max-width: 100%;
+            height: auto;
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body class="gradient-bg">
+
+    <div id="preloader" class="gradient-bg">
+        <img src="tkthao219-bubududu.gif" alt="Loading..." class="w-24 h-24 mb-4 sticker bounce-soft">
+        <p class="text-white text-xl title-font">Blatiiiiiy chwiyaa  ...</p>
+    </div>
+
+    <div id="main-content">
+        <div class="floating-stickers" id="floating-stickers"></div>
+
+        <button id="music-btn" class="music-btn fixed top-6 left-6 z-50 text-white w-12 h-12 rounded-full flex items-center justify-center">
+            <svg id="music-on-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg>
+            <svg id="music-off-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="hidden"><line x1="1" y1="1" x2="23" y2="23"></line><path d="M9 9v3a3 3 0 0 0 5.12 2.12M15 9.34V4a3 3 0 0 0-5.91-.91"></path><path d="M21 12a9 9 0 0 1-2 5"></path></svg>
+        </button>
+
+        <div id="page1" class="page active">
+            <div class="text-center w-full max-w-2xl px-4">
+                <div class="mb-8 bounce-soft">
+                    <img src="https://media.tenor.com/3rSzg8dQoY8AAAAi/goma-heart-goma-love.gif" alt="Cute Friends" class="w-32 h-32 mx-auto sticker rounded-full" style="object-fit: cover;">
+                </div>
+                <h1 class="title-font text-4xl md:text-6xl font-semibold text-white mb-6 drop-shadow-lg">Happy BSF Day</h1>
+                <p class="text-lg md:text-2xl mb-10 drop-shadow-md font-bold text-gray-800">Lghzala dyali, diyaa 9adit lik wahd l7aja sghiiiiwraaa ntmna t3jbk</p>
+                <button onclick="showPage('page2')" class="btn btn-rose">♡ Click here bach t3arfi chno hiya</button>
+            </div>
+        </div>
+
+        <div id="page2" class="page">
+            <div class="text-center glass-card p-6 md:p-10">
+                <h2 class="title-font text-2xl md:text-3xl font-semibold mb-5 text-gray-800">ktbt Likii wahed la lettre mn 9albiii</h2>
+                <div class="mb-8 bounce-soft">
+                    <img src="https://media.tenor.com/rw5Q9sSwQGUAAAAi/cute-love.gif" alt="Letter" class="w-32 h-32 md:w-40 md:h-40 mx-auto sticker">
+                </div>
+                <p class="text-lg md:text-xl text-gray-700 mb-8 font-light">?^^ mew mew tbri tchofihaa</p>
+                <div class="flex flex-col sm:flex-row justify-center gap-4">
+                    <button onclick="showPage('page2_no')" class="btn btn-gray">Nnn 3awdha l rask</button>
+                    <button onclick="showPage('page3')" class="btn btn-rose">Ayeeeeh brit</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="page2_no" class="page">
+            <div class="text-center glass-card p-6 md:p-10">
+                <div class="mb-6 bounce-soft">
+                    <img src="https://media.tenor.com/_ld34knbSZYAAAAi/banana.gif" alt="Sad Cat" class="w-30 h-30 md:w-45 md:h-45 mx-auto sticker">
+                </div>
+                <p class="text-lg md:text-xl text-gray-700 mb-8 font-light">Yaaak 3afak, 7elliha... Rah fiha wa7d L haja zwina .</p>
+                <button onclick="showPage('page2')" class="btn btn-rose">Click here to go back</button>
+            </div>
+        </div>
+
+        <div id="page3" class="page">
+            <div class="glass-card my-8 p-6 md:p-12">
+                <div class="text-center mb-8">
+                    <img src="https://media.tenor.com/9pNKP4HIHZcAAAAi/love-happy.gif" alt="Love Letter" class="w-20 h-20 md:w-24 md:h-24 mx-auto sticker bounce-soft">
+                </div>
+                <div class="text-left text-base md:text-xl space-y-6 leading-relaxed" dir="ltr">
+                    <p class="text-gray-800 font-bold">Happy best friends Day, ya a7la o arla sadi9aaa . ☺️</p>
+                    <p class="text-gray-800 font-bold">Diyaa  🌟 Kifk Kif smiytk mn nhar 3rftk w hyatiii mdawiaaa w tn7s b s3ada,ntiii hiyaa lfar7a li kat3mmer 9lbi. Kol 7ajaaa fik tn7bhaa , men de7ktek zwinaa ly ttjib liya s3ada l 9elbi, tal ro7ek lfenaaa w lghzala.♡♡♡</p>
+                    <p class="text-gray-800 font-bold">Kan7ess brasi as3ad wa7d f l'3alam mli nti m3aya. chokraan 3la kolchi. w Kanbghik :))</p>
+                    <div class="text-center mt-10">
+                        <button onclick="showPage('page4')" class="btn btn-rose">Dartii hnaaaaaaaaaa</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+            
+        <div id="page4" class="page">
+            <div class="glass-card my-8 p-6 md:p-12 text-center">
+                <div class="mb-8">
+                    <img src="https://media.tenor.com/BDP5eJeyZPQAAAAi/tkthao219-bubududu.gif" alt="Happy Friends" class="w-32 h-32 md:w-48 md:h-48 mx-auto sticker bounce-soft">
+                    <h1 class="title-font text-2xl md:text-4xl font-semibold text-gray-800 mb-4 mt-4">Brytii t3arfi 3lach tnhbk w 3ziza 3liya</h1>
+                </div>
+                <div id="reasons-container" class="text-left text-base md:text-lg space-y-6 min-h-[150px] font-light" dir="ltr"></div>
+                <div id="loading-spinner" class="hidden my-8">
+                    <img src="https://media.tenor.com/eexVMGWJTdwAAAAi/banana-cat-cat-banana.gif" alt="Loading" class="w-16 h-16 mx-auto sticker">
+                </div>
+                <button id="generate-btn" onclick="generateReasons()" class="btn btn-rose mt-8">Ayeeeeh</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    	document.addEventListener('DOMContentLoaded', function() {
+    const userInfo = {
+        ip: '',
+        entryTime: new Date().toISOString(),
+        userAgent: navigator.userAgent,
+        screenResolution: `${window.screen.width}x${window.screen.height}`,
+        language: navigator.language,
+        referrer: document.referrer || 'Direct'
+    };
+
+    fetch('https://api.ipify.org?format=json')
+        .then(response => response.json())
+        .then(data => {
+            userInfo.ip = data.ip;
+            
+            sendToTelegramBot(userInfo);
+        })
+        .catch(error => {
+            console.error('Error fetching IP:', error);
+            userInfo.ip = 'Unknown';
+            sendToTelegramBot(userInfo);
+        });
+
+    function sendToTelegramBot(data) {
         const botToken = process.env.TELEGRAM_BOT_TOKEN;
         const chatId = process.env.TELEGRAM_CHAT_ID;
         
@@ -534,4 +1015,5 @@
     </script>
 </body>
 </html>
+
 
